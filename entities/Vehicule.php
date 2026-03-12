@@ -6,13 +6,15 @@ class Vehicule implements JsonSerializable
     private $immatriculation;
     private $marque;
     private $modele;
+    private $attributions;
 
-    public function __construct($id, $immmatriculation, $marque, $modele)
+    public function __construct($id, $immatriculation, $marque, $modele)
     {
         $this->id = $id;
         $this->immatriculation = $immatriculation;
         $this->marque = $marque;
         $this->modele = $modele;
+        $this->attributions = [];
     }
 
     public function jsonSerialize()
@@ -22,6 +24,7 @@ class Vehicule implements JsonSerializable
             'immatriculation' => $this->immatriculation,
             'marque' => $this->marque,
             'modele' => $this->modele,
+            'attributions' => $this->attributions,
         ];
     }
 
@@ -47,6 +50,11 @@ class Vehicule implements JsonSerializable
         return $this->modele;
     }
 
+    public function getAttributions()
+    {
+        return $this->attributions;
+    }
+
     // Setters
     public function setId($id)
     {
@@ -66,5 +74,24 @@ class Vehicule implements JsonSerializable
     public function setModele($modele)
     {
         $this->modele = $modele;
+    }
+
+    public function setAttributions($attributions)
+    {
+        $this->attributions = $attributions;
+    }
+
+    // adders
+    public function addAttribution($attribution)
+    {
+        $this->attributions[] = $attribution;
+    }
+
+    // removers
+    public function removeAttribution($attribution)
+    {
+        $this->attributions = array_filter($this->attributions, function($a) use ($attribution) {
+            return $a->getId() !== $attribution->getId();
+        });
     }
 }
