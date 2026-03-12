@@ -9,13 +9,14 @@ function getSaisieJourByVisiteurId($id){
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $saisieJourData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $saisieJours = [];
     foreach ($saisieJourData as $saisieJour) {
         $saisieJours[] = new SaisieJour(
             $saisieJour['id'],
             $saisieJour['date'],
             $saisieJour['km_journee'],
-            getVisiteurById($saisieJour['id_visiteur']),
-            getVehiculeById($saisieJour['id_vehicule']));
+            getVisiteurByIdLight($saisieJour['id_visiteur']),
+            getVehiculeByIdLight($saisieJour['id_vehicule']));
     }
     return $saisieJours;
 }
@@ -44,13 +45,14 @@ function getSaisieJourByVehiculeId($id){
     $stmt->execute();
 
     $saisieJourData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $saisieJours = [];
     foreach ($saisieJourData as $saisieJour) {
         $saisieJours[] = new SaisieJour(
             $saisieJour['id'],
             $saisieJour['date'],
             $saisieJour['km_journee'],
-            getVisiteurById($saisieJour['id_visiteur']),
-            getVehiculeById($saisieJour['id_vehicule']));
+            getVisiteurByIdLight($saisieJour['id_visiteur']),
+            getVehiculeByIdLight($saisieJour['id_vehicule']));
     }
     return $saisieJours;
 }

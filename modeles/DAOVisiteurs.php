@@ -11,12 +11,21 @@ function getVisiteurByLogin($login)
     $stmt->execute();
     $visiteur = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($visiteur) {
-        return new Visiteur($visiteur['id'], $visiteur['login'], $visiteur['password_hash'], null);
+        return new Visiteur(
+            $visiteur['id'], $visiteur['login'], $visiteur['password_hash'], null,
+            getSaisieJourByVisiteurId($visiteur['id']),
+            getSaisieHebdoByVisiteurId($visiteur['id']),
+            getTotalSaisieJourByVisiteurId($visiteur['id']),
+            getTotalSaisieHebdoByVisiteurId($visiteur['id']));
     }
     return null;
 }
 
-function getVisiteurById($id)
+/**
+ * Retourne un visiteur sans charger ses saisies (évite la boucle infinie
+ * quand on construit des SaisieJour/SaisieHebdo qui référencent un visiteur).
+ */
+function getVisiteurByIdLight($id)
 {
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
@@ -24,11 +33,41 @@ function getVisiteurById($id)
         FROM visiteurs
         WHERE id = :id
     ");
-
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $visiteur = $stmt->fetch(PDO::FETCH_ASSOC);
-    return new Visiteur($visiteur['id'], $visiteur['login'], $visiteur['password_hash'], null);
+    if (!$visiteur) {
+        return null;
+    }
+    return new Visiteur(
+        $visiteur['id'],
+        $visiteur['login'],
+        $visiteur['password_hash'],
+        null,
+        null,
+        null,
+        0,
+        0
+    );
+}
+
+function getVisiteurById($id)
+{
+    $visiteur = getVisiteurByIdLight($id);
+    if (!$visiteur) {
+        return null;
+    }
+    $id = $visiteur->getId();
+    return new Visiteur(
+        $visiteur->getId(),
+        $visiteur->getLogin(),
+        $visiteur->getPassword(),
+        null,
+        getSaisieJourByVisiteurId($id),
+        getSaisieHebdoByVisiteurId($id),
+        getTotalSaisieJourByVisiteurId($id),
+        getTotalSaisieHebdoByVisiteurId($id)
+    );
 }
 
 function addVisiteur($visiteur)

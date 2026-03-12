@@ -10,11 +10,24 @@ function getAllVehicules()
     $stmt->execute();
     $vehicules = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return array_map(function($vehicule) {
-        return new Vehicule($vehicule['id'], $vehicule['immatriculation'], $vehicule['marque'], $vehicule['modele'], []);
+        return new Vehicule(
+            $vehicule['id'], 
+            $vehicule['immatriculation'], 
+            $vehicule['marque'], 
+            $vehicule['modele'], 
+            [],
+            getSaisieJourByVehiculeId($vehicule['id']),
+            getSaisieHebdoByVehiculeId($vehicule['id']),
+            getTotalSaisieJourByVehiculeId($vehicule['id']),
+            getTotalSaisieHebdoByVehiculeId($vehicule['id']));
     }, $vehicules);
 }
 
-function getVehiculeById($id)
+/**
+ * Retourne un véhicule sans charger ses saisies (évite la boucle infinie
+ * quand on construit des SaisieJour/SaisieHebdo qui référencent un véhicule).
+ */
+function getVehiculeByIdLight($id)
 {
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
@@ -22,11 +35,43 @@ function getVehiculeById($id)
         FROM vehicules
         WHERE id = :id
     ");
-
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $vehicule = $stmt->fetch(PDO::FETCH_ASSOC);
-    return new Vehicule($vehicule['id'], $vehicule['immatriculation'], $vehicule['marque'], $vehicule['modele'], []);
+    if (!$vehicule) {
+        return null;
+    }
+    return new Vehicule(
+        $vehicule['id'],
+        $vehicule['immatriculation'],
+        $vehicule['marque'],
+        $vehicule['modele'],
+        [],
+        null,
+        null,
+        0,
+        0
+    );
+}
+
+function getVehiculeById($id)
+{
+    $vehicule = getVehiculeByIdLight($id);
+    if (!$vehicule) {
+        return null;
+    }
+    $id = $vehicule->getId();
+    return new Vehicule(
+        $vehicule->getId(),
+        $vehicule->getImmatriculation(),
+        $vehicule->getMarque(),
+        $vehicule->getModele(),
+        [],
+        getSaisieJourByVehiculeId($id),
+        getSaisieHebdoByVehiculeId($id),
+        getTotalSaisieJourByVehiculeId($id),
+        getTotalSaisieHebdoByVehiculeId($id)
+    );
 }
 
 function addVehicule($vehicule)
