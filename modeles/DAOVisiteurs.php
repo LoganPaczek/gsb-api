@@ -1,4 +1,21 @@
 <?php
+function getVisiteurByLogin($login)
+{
+    $pdo = PDO2::getInstance();
+    $stmt = $pdo->prepare("
+        SELECT id, login, password_hash
+        FROM visiteurs
+        WHERE login = :login
+    ");
+    $stmt->bindValue(':login', $login, PDO::PARAM_STR);
+    $stmt->execute();
+    $visiteur = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($visiteur) {
+        return new Visiteur($visiteur['id'], $visiteur['login'], $visiteur['password_hash'], null);
+    }
+    return null;
+}
+
 function addVisiteur($visiteur)
 {
     $pdo = PDO2::getInstance();
