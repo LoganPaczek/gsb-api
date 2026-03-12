@@ -20,6 +20,19 @@ function getSaisieJourByVisiteurId($id){
     return $saisieJours;
 }
 
+function getTotalSaisieJourByVisiteurId($id){
+    $pdo = PDO2::getInstance();
+    $stmt = $pdo->prepare("
+        SELECT SUM(km_journee) as total
+        FROM saisie_jour
+        WHERE id_visiteur = :id
+        GROUP BY id_visiteur
+    ");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return (int)$stmt->fetch(PDO::FETCH_ASSOC)['total'];
+}
+
 function getSaisieJourByVehiculeId($id){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
@@ -42,6 +55,19 @@ function getSaisieJourByVehiculeId($id){
     return $saisieJours;
 }
 
+function getTotalSaisieJourByVehiculeId($id){
+    $pdo = PDO2::getInstance();
+    $stmt = $pdo->prepare("
+        SELECT SUM(km_journee) as total
+        FROM saisie_jour
+        WHERE id_vehicule = :id
+        GROUP BY id_vehicule
+    ");
+
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return (int)$stmt->fetch(PDO::FETCH_ASSOC)['total'];
+}
 function addSaisieJour($saisieJour){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
