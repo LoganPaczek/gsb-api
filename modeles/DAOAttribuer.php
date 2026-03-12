@@ -1,5 +1,39 @@
 <?php
+function getAttributionsByVisiteurId($id)
+{
+    $pdo = PDO2::getInstance();
+    $stmt = $pdo->prepare("
+        SELECT id_visiteur, id_vehicule, date_debut, date_fin
+        FROM attribuer
+        WHERE id_visiteur = :id
+    ");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $attribution = $stmt->fetch(PDO::FETCH_ASSOC);
+    return new Attribution(
+        getVisiteurById($attribution['id_visiteur']),
+        getVehiculeById($attribution['id_vehicule']),
+        $attribution['date_debut'],
+        $attribution['date_fin']);
+}
 
+function getAttributionsByVehiculeId($id)
+{
+    $pdo = PDO2::getInstance();
+    $stmt = $pdo->prepare("
+        SELECT id_visiteur, id_vehicule, date_debut, date_fin
+        FROM attribuer
+        WHERE id_vehicule = :id
+    ");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $attribution = $stmt->fetch(PDO::FETCH_ASSOC);
+    return new Attribution(
+        getVisiteurById($attribution['id_visiteur']),
+        getVehiculeById($attribution['id_vehicule']),
+        $attribution['date_debut'],
+        $attribution['date_fin']);
+}
 function addAttribution($attribution)
 {
     $pdo = PDO2::getInstance();
