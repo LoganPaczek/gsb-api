@@ -1,16 +1,18 @@
 <?php
+require_once 'Visiteur.php';
+require_once 'Vehicule.php';
 
 class Attribution implements JsonSerializable
 {
-    private $idVisiteur;
-    private $idVehicule;
+    private $visiteur;
+    private $vehicule;
     private $dateDebut;
     private $dateFin;
 
-    public function __construct($idVisiteur, $idVehicule, $dateDebut, $dateFin)
+    public function __construct(Visiteur $visiteur, Vehicule $vehicule, $dateDebut, $dateFin)
     {
-        $this->idVisiteur = $idVisiteur;
-        $this->idVehicule = $idVehicule;
+        $this->visiteur = $visiteur;
+        $this->vehicule = $vehicule;
         $this->dateDebut = $dateDebut;
         $this->dateFin = $dateFin;
     }
@@ -18,22 +20,22 @@ class Attribution implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'idVisiteur' => $this->idVisiteur,
-            'idVehicule' => $this->idVehicule,
+            'visiteur' => $this->visiteur,
+            'vehicule' => $this->vehicule,
             'dateDebut' => $this->dateDebut,
             'dateFin' => $this->dateFin,
         ];
     }
     
     // Getters
-    public function getIdVisiteur()
+    public function getVisiteur()
     {
-        return $this->idVisiteur;
+        return $this->visiteur;
     }
 
-    public function getIdVehicule()
+    public function getVehicule()
     {
-        return $this->idVehicule;
+        return $this->vehicule;
     }
     
     public function getDateDebut()
@@ -47,14 +49,14 @@ class Attribution implements JsonSerializable
     }
     
     // Setters
-    public function setIdVisiteur($idVisiteur)
+    public function setVisiteur($visiteur)
     {
-        $this->idVisiteur = $idVisiteur;
+        $this->visiteur = $visiteur;
     }
 
-    public function setIdVehicule($idVehicule)
+    public function setVehicule($vehicule)
     {
-        $this->idVehicule = $idVehicule;
+        $this->vehicule = $vehicule;
     }
 
     public function setDateDebut($dateDebut)

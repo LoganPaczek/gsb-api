@@ -6,15 +6,15 @@ class Vehicule implements JsonSerializable
     private $immatriculation;
     private $marque;
     private $modele;
-    private $attributions;
+    private $attributions = [];
 
-    public function __construct($id, $immatriculation, $marque, $modele)
+    public function __construct($id, $immatriculation, $marque, $modele, array $attributions = [])
     {
         $this->id = $id;
         $this->immatriculation = $immatriculation;
         $this->marque = $marque;
         $this->modele = $modele;
-        $this->attributions = [];
+        $this->attributions = $attributions;
     }
 
     public function jsonSerialize()
