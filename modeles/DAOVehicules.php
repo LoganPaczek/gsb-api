@@ -14,6 +14,21 @@ function getAllVehicules()
     }, $vehicules);
 }
 
+function getVehiculeById($id)
+{
+    $pdo = PDO2::getInstance();
+    $stmt = $pdo->prepare("
+        SELECT id, immatriculation, marque, modele
+        FROM vehicules
+        WHERE id = :id
+    ");
+
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $vehicule = $stmt->fetch(PDO::FETCH_ASSOC);
+    return new Vehicule($vehicule['id'], $vehicule['immatriculation'], $vehicule['marque'], $vehicule['modele'], []);
+}
+
 function addVehicule($vehicule)
 {
     $pdo = PDO2::getInstance();
