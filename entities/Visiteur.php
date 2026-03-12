@@ -23,6 +23,7 @@ class Visiteur implements JsonSerializable
         ];
     }
 
+    // Getters
     public function getId()
     {
         return $this->id;
@@ -43,6 +44,7 @@ class Visiteur implements JsonSerializable
         return $this->vehicule;
     }
 
+    // Setters
     public function setId($id)
     {
         $this->id = $id;
