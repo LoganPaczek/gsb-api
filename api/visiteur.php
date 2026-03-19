@@ -7,8 +7,6 @@ include_once '../modeles/DAOVisiteurs.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':
-        break;
     case 'POST':
         // Accepter JSON (Postman, etc.) ou formulaire
         $data = $_POST;

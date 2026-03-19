@@ -15,8 +15,8 @@ function getSaisieHebdoByVisiteurId($id){
             $saisieHebdo['id'],
             $saisieHebdo['date_'],
             $saisieHebdo['km_hebdo'],
-            getVisiteurById($saisieHebdo['id_visiteur']),
-            getVehiculeById($saisieHebdo['id_vehicule']));
+            getVisiteurByIdLight($saisieHebdo['id_visiteur']),
+            getVehiculeByIdLight($saisieHebdo['id_vehicule']));
     }
     return $saisieHebdos;
 }
@@ -52,8 +52,8 @@ function getSaisieHebdoByVehiculeId($id){
             $saisieHebdo['id'],
             $saisieHebdo['date_'],
             $saisieHebdo['km_hebdo'],
-            getVisiteurById($saisieHebdo['id_visiteur']),
-            getVehiculeById($saisieHebdo['id_vehicule']));
+            getVisiteurByIdLight($saisieHebdo['id_visiteur']),
+            getVehiculeByIdLight($saisieHebdo['id_vehicule']));
     }
     return $saisieHebdos;
 }
@@ -77,9 +77,9 @@ function addSaisieHebdo($saisieHebdo){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
         INSERT INTO saisie_hebdo (date, km_hebdo, id_visiteur, id_vehicule)
-        VALUES (:date, :km_hebdo, :id_visiteur, :id_vehicule)
+        VALUES (:date_, :km_hebdo, :id_visiteur, :id_vehicule)
     ");
-    $stmt->bindValue(':date', $saisieHebdo->getDate(), PDO::PARAM_STR);
+    $stmt->bindValue(':date_', $saisieHebdo->getDate(), PDO::PARAM_STR);
     $stmt->bindValue(':km_hebdo', $saisieHebdo->getKmHebdo(), PDO::PARAM_INT);
     $stmt->bindValue(':id_visiteur', $saisieHebdo->getVisiteur()->getId(), PDO::PARAM_INT);
     $stmt->bindValue(':id_vehicule', $saisieHebdo->getVehicule()->getId(), PDO::PARAM_INT);
