@@ -14,6 +14,20 @@ include_once '../modeles/DAOVehicules.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
+    case 'GET':
+        if(isset($_GET['id_visiteur'])){
+            $saisieHebdo = getTotalSaisieHebdoByVisiteurId($_GET['id_visiteur']);
+            echo json_encode($saisieHebdo);
+            http_response_code(200);
+        } else if(isset($_GET['id_vehicule'])){
+            $saisieHebdo = getTotalSaisieHebdoByVehiculeId($_GET['id_vehicule']);
+            echo json_encode($saisieHebdo);
+            http_response_code(200);
+        } else {
+            http_response_code(404);
+        }
+
+        break;
     case 'POST':
         // Accepter JSON (Postman, etc.) ou formulaire
         $data = $_POST;
