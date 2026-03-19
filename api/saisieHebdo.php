@@ -15,13 +15,21 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        if(isset($_GET['id_visiteur'])){
-            $saisieJour = getTotalSaisieJourByVisiteurId($_GET['id_visiteur']);
-            echo json_encode($saisieJour);
+        if(isset($_GET['id_visiteur']) && isset($_GET['statistic'])){
+            $saisieHebdo = getSaisieHebdoByVisiteurId($_GET['id_visiteur']);
+            echo json_encode($saisieHebdo);
+            http_response_code(200);
+        } else if(isset($_GET['id_vehicule']) && isset($_GET['statistic'])){
+            $saisieHebdo = getSaisieHebdoByVehiculeId($_GET['id_vehicule']);
+            echo json_encode($saisieHebdo);
             http_response_code(200);
         } else if(isset($_GET['id_vehicule'])){
-            $saisieJour = getTotalSaisieJourByVehiculeId($_GET['id_vehicule']);
-            echo json_encode($saisieJour);
+            $saisieHebdo = getTotalSaisieHebdoByVehiculeId($_GET['id_vehicule']);
+            echo json_encode($saisieHebdo);
+            http_response_code(200);
+        } else if($_GET['id_visiteur']){
+            $saisieHebdo = getTotalSaisieHebdoByVisiteurId($_GET['id_visiteur']);
+            echo json_encode($saisieHebdo);
             http_response_code(200);
         } else {
             http_response_code(404);
@@ -35,21 +43,21 @@ switch ($method) {
             $raw = file_get_contents('php://input');
             $data = json_decode($raw, true) ?: [];
         }
-        if (isset($data['date']) && isset($data['kmJournee']) && isset($data['id_visiteur']) && isset($data['id_vehicule'])) {
+        if (isset($data['date']) && isset($data['kmHebdo']) && isset($data['id_visiteur']) && isset($data['id_vehicule'])) {
             $visiteur = getVisiteurByIdLight((int)$data['id_visiteur']);
             $vehicule = getVehiculeByIdLight((int)$data['id_vehicule']);
             if ($visiteur === null || $vehicule === null) {
                 http_response_code(404);
                 break;
             }
-            $saisieJour = new SaisieJour(
+            $saisieHebdo = new SaisieHebdo(
                 null,
                 $data['date'],
-                $data['kmJournee'],
+                $data['kmHebdo'],
                 $visiteur,
                 $vehicule
             );
-            $ajout = addSaisieJour($saisieJour);
+            $ajout = addSaisieHebdo($saisieHebdo);
             http_response_code($ajout ? 201 : 500);
         } else {
             http_response_code(400);
