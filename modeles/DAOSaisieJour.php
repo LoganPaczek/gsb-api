@@ -2,7 +2,7 @@
 function getSaisieJourByVisiteurId($id){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        SELECT id, date, km_journee, id_visiteur, id_vehicule
+        SELECT id, date_, km_journee, id_visiteur, id_vehicule
         FROM saisie_jour
         WHERE id_visiteur = :id
     ");
@@ -13,7 +13,7 @@ function getSaisieJourByVisiteurId($id){
     foreach ($saisieJourData as $saisieJour) {
         $saisieJours[] = new SaisieJour(
             $saisieJour['id'],
-            $saisieJour['date'],
+            $saisieJour['date_'],
             $saisieJour['km_journee'],
             getVisiteurByIdLight($saisieJour['id_visiteur']),
             getVehiculeByIdLight($saisieJour['id_vehicule']));
@@ -37,7 +37,7 @@ function getTotalSaisieJourByVisiteurId($id){
 function getSaisieJourByVehiculeId($id){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        SELECT id, date, km_journee, id_visiteur, id_vehicule
+        SELECT id, date_, km_journee, id_visiteur, id_vehicule
         FROM saisie_jour
         WHERE id_vehicule = :id
     ");
@@ -49,7 +49,7 @@ function getSaisieJourByVehiculeId($id){
     foreach ($saisieJourData as $saisieJour) {
         $saisieJours[] = new SaisieJour(
             $saisieJour['id'],
-            $saisieJour['date'],
+            $saisieJour['date_'],
             $saisieJour['km_journee'],
             getVisiteurByIdLight($saisieJour['id_visiteur']),
             getVehiculeByIdLight($saisieJour['id_vehicule']));

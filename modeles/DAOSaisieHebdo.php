@@ -2,7 +2,7 @@
 function getSaisieHebdoByVisiteurId($id){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        SELECT id, date, km_hebdo, id_visiteur, id_vehicule
+        SELECT id, date_, km_hebdo, id_visiteur, id_vehicule
         FROM saisie_hebdo
         WHERE id_visiteur = :id
     ");
