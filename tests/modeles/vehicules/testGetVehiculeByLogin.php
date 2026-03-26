@@ -6,6 +6,6 @@ require_once __DIR__ . '/../../../entities/Visiteur.php';
 require_once __DIR__ . '/../../../config/global.php';
 require_once __DIR__ . '/../../../libs/pdo2.php';
 
-$vehicules = getVehiculeByVisiteurId(1);
+$vehicules = getVehiculeByLogin("Ludwig");
 var_dump($vehicules);
 ?>

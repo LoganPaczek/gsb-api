@@ -1,16 +1,17 @@
 <?php
-function getVehiculeByVisiteurId($id){
+function getVehiculeByLogin($login){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
         SELECT v.id, v.immatriculation, v.marque, v.modele
         FROM vehicules v
         INNER JOIN attribuer a ON v.id = a.id_vehicule
-        WHERE a.id_visiteur = :id
+        INNER JOIN visiteurs vi ON a.id_visiteur = vi.id
+        WHERE vi.login = :login
           AND a.date_fin IS NULL
         ORDER BY a.date_debut DESC
         LIMIT 1
     ");
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':login', $login, PDO::PARAM_STR);
     $stmt->execute();
     $vehicule = $stmt->fetch(PDO::FETCH_ASSOC);
 

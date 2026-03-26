@@ -16,8 +16,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        if (isset($_GET['id'])) {
-            $vehicule = getVehiculeById((int)$_GET['id']);
+        if (isset($_GET['login'])) {
+            $vehicule = getVehiculeByLogin($_GET['login']);
             if ($vehicule === null) {
                 http_response_code(404);
                 break;
