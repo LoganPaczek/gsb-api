@@ -1,0 +1,2 @@
+CREATE USER mkbadmin@localhost IDENTIFIED BY "swDYo0A3soiL8qiZ5ENeM74kN9";
+GRANT ALL PRIVILEGES ON MKB.* TO mkbadmin@localhost;
