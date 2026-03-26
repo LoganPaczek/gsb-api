@@ -7,6 +7,21 @@ include_once '../modeles/DAOVisiteurs.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
+    case 'GET':
+        if (isset($_GET['login'])) {
+            $id = getIdByLogin($_GET['login']);
+            if ($id !== null) {
+                header('Content-Type: application/json');
+                echo json_encode(['id' => (int)$id]);
+                http_response_code(200);
+            } else {
+                http_response_code(404);
+            }
+        } else {
+            http_response_code(400);
+        }
+        break;
+
     case 'POST':
         // Accepter JSON (Postman, etc.) ou formulaire
         $data = $_POST;
@@ -26,7 +41,14 @@ switch ($method) {
                 0
             );
             $ajout = addVisiteur($visiteur);
-            http_response_code($ajout ? 201 : 500);
+            if ($ajout) {
+                $id = (int)PDO2::getInstance()->lastInsertId();
+                header('Content-Type: application/json');
+                echo json_encode(['id' => $id]);
+                http_response_code(201);
+            } else {
+                http_response_code(500);
+            }
         } else {
             http_response_code(400);
         }

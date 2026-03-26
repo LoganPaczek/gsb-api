@@ -1,4 +1,19 @@
 <?php
+function getIdByLogin($login)
+{
+    $pdo = PDO2::getInstance();
+    $stmt = $pdo->prepare("
+        SELECT id
+        FROM visiteurs
+        WHERE login = :login
+        LIMIT 1
+    ");
+    $stmt->bindValue(':login', $login, PDO::PARAM_STR);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row ? (int)$row['id'] : null;
+}
+
 function getVisiteurByLogin($login)
 {
     $pdo = PDO2::getInstance();
