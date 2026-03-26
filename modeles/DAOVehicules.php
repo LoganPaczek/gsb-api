@@ -1,4 +1,37 @@
 <?php
+function getVehiculeByVisiteurId($id){
+    $pdo = PDO2::getInstance();
+    $stmt = $pdo->prepare("
+        SELECT v.id, v.immatriculation, v.marque, v.modele
+        FROM vehicules v
+        INNER JOIN attribuer a ON v.id = a.id_vehicule
+        WHERE a.id_visiteur = :id
+          AND a.date_fin IS NULL
+        ORDER BY a.date_debut DESC
+        LIMIT 1
+    ");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $vehicule = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$vehicule) {
+        return null;
+    }
+
+    // Retour "light" : on évite de recharger les saisies/relations pour ne pas créer de boucles.
+    return new Vehicule(
+        $vehicule['id'],
+        $vehicule['immatriculation'],
+        $vehicule['marque'],
+        $vehicule['modele'],
+        [],
+        null,
+        null,
+        0,
+        0
+    );
+}
+
 function getAllVehicules()
 {
     $pdo = PDO2::getInstance();
