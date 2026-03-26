@@ -90,7 +90,7 @@ function getTotalSaisieJourByCurrentVehiculeAndVisiteurId($idVisiteur){
 function addSaisieJour($saisieJour){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        INSERT INTO saisie_jour (date, km_journee, id_visiteur, id_vehicule)
+        INSERT INTO saisie_jour (date_, km_journee, id_visiteur, id_vehicule)
         VALUES (:date, :km_journee, :id_visiteur, :id_vehicule)
     ");
     $stmt->bindValue(':date', $saisieJour->getDate(), PDO::PARAM_STR);
