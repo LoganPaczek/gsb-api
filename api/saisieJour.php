@@ -15,7 +15,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        if(isset($_GET['id_visiteur']) && isset($_GET['statistic'])){
+        if(isset($_GET['id_visiteur']) && isset($_GET['current_vehicule'])){
+            $total = getTotalSaisieJourByCurrentVehiculeAndVisiteurId((int)$_GET['id_visiteur']);
+            echo json_encode($total);
+            http_response_code(200);
+        } else if(isset($_GET['id_visiteur']) && isset($_GET['statistic'])){
             $saisieJour = getSaisieJourByVisiteurId($_GET['id_visiteur']);
             echo json_encode($saisieJour);
             http_response_code(200);
