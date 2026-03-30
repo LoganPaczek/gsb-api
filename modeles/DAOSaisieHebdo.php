@@ -2,7 +2,7 @@
 function getSaisieHebdoByVisiteurId($id){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        SELECT id, date_, km_hebdo, id_visiteur, id_vehicule
+        SELECT id, date_, relevee_compteur, id_visiteur, id_vehicule
         FROM saisie_hebdo
         WHERE id_visiteur = :id
     ");
@@ -14,7 +14,7 @@ function getSaisieHebdoByVisiteurId($id){
         $saisieHebdos[] = new SaisieHebdo(
             $saisieHebdo['id'],
             $saisieHebdo['date_'],
-            $saisieHebdo['km_hebdo'],
+            $saisieHebdo['relevee_compteur'],
             getVisiteurByIdLight($saisieHebdo['id_visiteur']),
             getVehiculeByIdLight($saisieHebdo['id_vehicule']));
     }
@@ -24,7 +24,7 @@ function getSaisieHebdoByVisiteurId($id){
 function getTotalSaisieHebdoByVisiteurId($id){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        SELECT SUM(km_hebdo) as total
+        SELECT SUM(relevee_compteur) as total
         FROM saisie_hebdo
         WHERE id_visiteur = :id
         GROUP BY id_visiteur
@@ -38,7 +38,7 @@ function getTotalSaisieHebdoByVisiteurId($id){
 function getSaisieHebdoByVehiculeId($id){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        SELECT id, date, km_hebdo, id_visiteur, id_vehicule
+        SELECT id, date, relevee_compteur, id_visiteur, id_vehicule
         FROM saisie_hebdo
         WHERE id_vehicule = :id
     ");
@@ -51,7 +51,7 @@ function getSaisieHebdoByVehiculeId($id){
         $saisieHebdos[] = new SaisieHebdo(
             $saisieHebdo['id'],
             $saisieHebdo['date_'],
-            $saisieHebdo['km_hebdo'],
+            $saisieHebdo['relevee_compteur'],
             getVisiteurByIdLight($saisieHebdo['id_visiteur']),
             getVehiculeByIdLight($saisieHebdo['id_vehicule']));
     }
@@ -61,7 +61,7 @@ function getSaisieHebdoByVehiculeId($id){
 function getTotalSaisieHebdoByVehiculeId($id){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        SELECT SUM(km_hebdo) as total
+        SELECT SUM(relevee_compteur) as total
         FROM saisie_hebdo
         WHERE id_vehicule = :id
         GROUP BY id_vehicule
@@ -76,11 +76,11 @@ function getTotalSaisieHebdoByVehiculeId($id){
 function addSaisieHebdo($saisieHebdo){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        INSERT INTO saisie_hebdo (date, km_hebdo, id_visiteur, id_vehicule)
-        VALUES (:date_, :km_hebdo, :id_visiteur, :id_vehicule)
+        INSERT INTO saisie_hebdo (date, relevee_compteur, id_visiteur, id_vehicule)
+        VALUES (:date_, :relevee_compteur, :id_visiteur, :id_vehicule)
     ");
     $stmt->bindValue(':date_', $saisieHebdo->getDate(), PDO::PARAM_STR);
-    $stmt->bindValue(':km_hebdo', $saisieHebdo->getKmHebdo(), PDO::PARAM_INT);
+    $stmt->bindValue(':relevee_compteur', $saisieHebdo->getKmHebdo(), PDO::PARAM_INT);
     $stmt->bindValue(':id_visiteur', $saisieHebdo->getVisiteur()->getId(), PDO::PARAM_INT);
     $stmt->bindValue(':id_vehicule', $saisieHebdo->getVehicule()->getId(), PDO::PARAM_INT);
     $stmt->execute();
