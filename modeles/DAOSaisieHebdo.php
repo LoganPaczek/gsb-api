@@ -76,7 +76,7 @@ function getTotalSaisieHebdoByVehiculeId($id){
 function addSaisieHebdo($saisieHebdo){
     $pdo = PDO2::getInstance();
     $stmt = $pdo->prepare("
-        INSERT INTO saisie_hebdo (date, relevee_compteur, id_visiteur, id_vehicule)
+        INSERT INTO saisie_hebdo (date_, relevee_compteur, id_visiteur, id_vehicule)
         VALUES (:date_, :relevee_compteur, :id_visiteur, :id_vehicule)
     ");
     $stmt->bindValue(':date_', $saisieHebdo->getDate(), PDO::PARAM_STR);
